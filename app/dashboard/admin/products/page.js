@@ -3,26 +3,30 @@ import axios from 'axios';
 import React from 'react';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
+import EditProductPopup from '@/Components/EditProductPopup';
 
 const AllProducts = () => {
     const [products, setProducts] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState(null);
+    const [selectedProduct, setSelectedProduct] = React.useState(null);
+    const [isEditPopupOpen, setEditPopupOpen] = React.useState(false);
+
+    const fetchProducts = async () => {
+        try {
+            const response = await axios.get('/api/allProducts');
+            if (response.status !== 200) {
+                throw new Error('Network response was not ok');
+            }
+            setProducts(response?.data);
+        } catch (err) {
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     React.useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await axios.get('/api/allProducts');
-                if (response.status !== 200) {
-                    throw new Error('Network response was not ok');
-                }
-                setProducts(response?.data);
-            } catch (err) {
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchProducts();
     }, []);
 
@@ -56,6 +60,20 @@ const AllProducts = () => {
             }
         });
     };
+
+    const handleUpdateProduct = (updatedProduct) => {
+        setProducts(products.map(p => p._id === updatedProduct._id ? updatedProduct : p));
+    }
+
+    const openEditPopup = (product) => {
+        setSelectedProduct(product);
+        setEditPopupOpen(true);
+    }
+
+    const closeEditPopup = () => {
+        setSelectedProduct(null);
+        setEditPopupOpen(false);
+    }
 
     if (loading) return <div className="p-8">Loading...</div>;
     if (error) return <div className="p-8">Error: {error.message}</div>;
@@ -110,7 +128,7 @@ const AllProducts = () => {
                                         </span>
                                     </td>
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                                        <Link href={`/dashboard/admin/products/edit/${product._id}`} className="text-indigo-600 hover:text-indigo-900">Edit</Link>
+                                        <button onClick={() => openEditPopup(product)} className="text-indigo-600 hover:text-indigo-900">Edit</button>
                                         <button onClick={() => handleDelete(product._id)} className="text-red-600 hover:text-red-900 ml-4">Delete</button>
                                     </td>
                                 </tr>
@@ -119,6 +137,15 @@ const AllProducts = () => {
                     </table>
                 </div>
             </div>
+            {isEditPopupOpen && (
+                <EditProductPopup
+                    product={selectedProduct}
+                    onClose={closeEditPopup}
+                    onProductUpdate={()=>{
+                        handleUpdateProduct();
+                    }}
+                />
+            )}
         </div>
     );
 }
