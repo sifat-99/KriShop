@@ -61,9 +61,29 @@ const AllProducts = () => {
         });
     };
 
-    const handleUpdateProduct = (updatedProduct) => {
-        setProducts(products.map(p => p._id === updatedProduct._id ? updatedProduct : p));
-    }
+    // const handleUpdateProduct = async (updatedProduct) => {
+    //     console.log("hit");
+
+    //     const { _id, ...productData } = updatedProduct;
+    //     console.log(_id);
+
+    //     try {
+    //         await axios.put(`/api/product/${updatedProduct._id}`, updatedProduct);
+    //         setProducts(products.map(p => p._id === updatedProduct._id ? updatedProduct : p));
+    //         Swal.fire(
+    //             'Updated!',
+    //             'The product has been updated.',
+    //             'success'
+    //         );
+    //     } catch (err) {
+    //         console.error('Failed to update product', err);
+    //         Swal.fire(
+    //             'Error!',
+    //             'There was an error updating the product.',
+    //             'error'
+    //         );
+    //     }
+    // }
 
     const openEditPopup = (product) => {
         setSelectedProduct(product);
@@ -141,9 +161,9 @@ const AllProducts = () => {
                 <EditProductPopup
                     product={selectedProduct}
                     onClose={closeEditPopup}
-                    onProductUpdate={()=>{
-                        handleUpdateProduct();
-                    }}
+                    // onProductUpdate={() => {
+                    //     handleUpdateProduct();
+                    // }}
                 />
             )}
         </div>

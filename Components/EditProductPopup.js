@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const EditProductPopup = ({ product, onClose, onProductUpdate }) => {
+const EditProductPopup = ({ product, onClose }) => {
     const [formData, setFormData] = useState(product || {});
 
     useEffect(() => {
@@ -26,12 +26,18 @@ const EditProductPopup = ({ product, onClose, onProductUpdate }) => {
         e.preventDefault();
         try {
             const response = await axios.put(`/api/product/${product._id}`, formData);
-            onProductUpdate(response.data);
-            onClose();
-            Swal.fire('Success!', 'Product updated successfully.', 'success');
+            console.log(response.data);
+
+            if (response.status === 200) {
+                Swal.fire(
+                    'Updated!',
+                    'The product has been updated.',
+                    'success'
+                );
+                onClose();
+            }
         } catch (error) {
             console.error('Failed to update product', error);
-            Swal.fire('Error!', 'Failed to update product.', 'error');
         }
     };
 
