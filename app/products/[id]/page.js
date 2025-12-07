@@ -18,14 +18,8 @@ export default function ProductDetailsPage({ params }) {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`/api/allProducts`);
-                console.log(response.data)
-                const filteredProduct = await response.data.find(p => p._id == id);
-                console.log(filteredProduct)
-                if (!filteredProduct) {
-                    throw new Error('Product not found');
-                }
-                setProduct(filteredProduct);
+                const response = await axios.get(`/api/product/${id}`);
+                setProduct(response.data);
             } catch (error) {
                 console.error("Failed to fetch product:", error);
             } finally {

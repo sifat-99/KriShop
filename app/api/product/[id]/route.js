@@ -5,7 +5,7 @@ import { withAuth } from "@/utils/withAuth";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 
-export const GET = withAuth(async (req, { params }) => {
+export const GET = async (req, { params }) => {
     await connect();
     const { id } = await params;
     let data = await Product.findById(id);
@@ -21,7 +21,7 @@ export const GET = withAuth(async (req, { params }) => {
     }
 
     return NextResponse.json(data, { status: 200 });
-});
+};
 
 export const PUT = withAuth(async (req, { params }) => {
     await connect();
