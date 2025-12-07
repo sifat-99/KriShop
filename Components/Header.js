@@ -10,9 +10,10 @@ import { useCart } from '@/context/CartContext';
 const Header = () => {
     const { data: session } = useSession();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { viewCart, cart } = useCart();
+    const { viewCart, cart, clearCart } = useCart();
 
     const handleLogout = () => {
+        clearCart();
         signOut();
     };
 
