@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import axios from 'axios';
-import { Suspense } from 'react';
+import Link from 'next/link';
 
 const SuccessContent = () => {
     const searchParams = useSearchParams();
@@ -24,7 +24,6 @@ const SuccessContent = () => {
                 const order = response.data.order;
 
                 if (order && order.items && order.items.length > 0) {
-                    // We need to match items by productName since that's what removeSelectedFromCart expects
                     removeSelectedFromCart(order.items);
                 }
             } catch (error) {
@@ -41,10 +40,11 @@ const SuccessContent = () => {
         <div className="flex flex-col items-center justify-center min-h-screen bg-green-50">
             <h1 className="text-4xl font-bold text-green-700 mb-4">Payment Successful!</h1>
             <p className="text-lg text-gray-700 mb-8">Thank you for your purchase.</p>
+
             <p className="text-md text-gray-500 mb-8">Transaction ID: {tran_id}</p>
-            <a href="/" className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors">
+            <Link href="/" className="px-6 py-3 bg-green-700 text-white rounded-lg hover:bg-green-800 transition-colors">
                 Go to Home
-            </a>
+            </Link>
         </div>
     );
 };

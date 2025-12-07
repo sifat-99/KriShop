@@ -1,5 +1,6 @@
 'use client'
 import axios from 'axios';
+import Image from 'next/image';
 import React from 'react';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
@@ -124,8 +125,13 @@ const AllProducts = () => {
                                 <tr key={product._id}>
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="flex items-center">
-                                            <div className="flex-shrink-0 w-10 h-10">
-                                                <img className="w-full h-full rounded-full" src={product.images[0]?.url || 'https://placehold.co/40x40'} alt={product.name} />
+                                            <div className="flex-shrink-0 w-10 h-10 relative">
+                                                <Image
+                                                    src={product.images[0]?.url || 'https://placehold.co/40x40'}
+                                                    alt={product.name}
+                                                    fill
+                                                    className="rounded-full object-cover"
+                                                />
                                             </div>
                                             <div className="ml-3">
                                                 <p className="text-gray-900 whitespace-no-wrap">{product.name}</p>
@@ -161,9 +167,9 @@ const AllProducts = () => {
                 <EditProductPopup
                     product={selectedProduct}
                     onClose={closeEditPopup}
-                    // onProductUpdate={() => {
-                    //     handleUpdateProduct();
-                    // }}
+                // onProductUpdate={() => {
+                //     handleUpdateProduct();
+                // }}
                 />
             )}
         </div>
